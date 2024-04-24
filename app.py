@@ -26,17 +26,24 @@ if __name__ == '__main__':
     model = joblib.load("model.pkl")
     
     vector = []
-    for i in range(18):
+for i in range(15):
         if i % 3 == 0:
-            vector.append(st.text_input(f"Average rain of Week {i//3 + 35}"))
+            vector.append(st.number_input(f"Average rain of Week {i//3 + 35}"))
         elif i % 3 == 1:
-            vector.append(st.text_input(f"TMAX of Week {i//3 + 35}"))
+            vector.append(st.number_input(f"TMAX of Week {i//3 + 35}"))
         else:
-            vector.append(st.text_input(f"TMIN of Week {i//3 + 35}"))
+            vector.append(st.number_input(f"TMIN of Week {i//3 + 35}"))
     
-    botrytis_rate = st.slider("Botrytis Rate", min_value = 0, max_value = 1, value = 0.1)
-    no_sugar_rate = st.slider("No Sugar Rate", min_value = 0, max_value = 1, value = 0.1)
-    typical_sugar_rate = st.slider("Typical Sugar Rate", min_value = 0, max_value = 1 - no_sugar_rate, value = 0.1)
+    botrytis_rate = st.slider("Botrytis Rate", min_value = 0, max_value = 100, value = 10)
+    no_sugar_rate = st.slider("No Sugar Rate", min_value = 0, max_value = 100, value = 10)
+    typical_sugar_rate = st.slider("Typical Sugar Rate", min_value = 0, max_value = 100 - no_sugar_rate, value = 10)
+    
+    recommendation = makeRecommendation(model, np.array(vector, dtype='float64').reshape(1,15), botrytis_rate/100, no_sugar_rate/100, typical_sugar_rate/100)
+    st.write("""
+# Forecast Storm
+Below are my recommendation:
+{recommendation}
+""")
     
     recommendation = makeRecommendation(model, np.array(vector), botrytis_rate, no_sugar_rate, typical_sugar_rate)
     st.write("""
