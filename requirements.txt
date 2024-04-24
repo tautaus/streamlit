@@ -1,2 +1,2 @@
-joblib=1.4.0
+joblib==1.4.0
 numpy==1.23
