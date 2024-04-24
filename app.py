@@ -26,7 +26,7 @@ if __name__ == '__main__':
     model = joblib.load("model.pkl")
     
     vector = []
-for i in range(15):
+    for i in range(15):
         if i % 3 == 0:
             vector.append(st.number_input(f"Average rain of Week {i//3 + 35}"))
         elif i % 3 == 1:
