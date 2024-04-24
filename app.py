@@ -23,6 +23,7 @@ def makeRecommendation(model, temp_data, botrytis_rate, no_sugar_rate, typical_s
     return recommendation
 
 if __name__ == '__main__':
+    st.title("Forecast Storm")
     model = joblib.load("model.pkl")
     
     vector = []
@@ -30,24 +31,13 @@ if __name__ == '__main__':
         if i % 3 == 0:
             vector.append(st.number_input(f"Average rain of Week {i//3 + 35}"))
         elif i % 3 == 1:
-            vector.append(st.number_input(f"TMAX of Week {i//3 + 35}"))
+            vector.append(st.number_input(f"Max temperature of Week {i//3 + 35}"))
         else:
-            vector.append(st.number_input(f"TMIN of Week {i//3 + 35}"))
+            vector.append(st.number_input(f"Min temperature of Week {i//3 + 35}"))
     
     botrytis_rate = st.slider("Botrytis Rate", min_value = 0, max_value = 100, value = 10)
     no_sugar_rate = st.slider("No Sugar Rate", min_value = 0, max_value = 100, value = 10)
     typical_sugar_rate = st.slider("Typical Sugar Rate", min_value = 0, max_value = 100 - no_sugar_rate, value = 10)
     
     recommendation = makeRecommendation(model, np.array(vector, dtype='float64').reshape(1,15), botrytis_rate/100, no_sugar_rate/100, typical_sugar_rate/100)
-    st.write("""
-# Forecast Storm
-Below are my recommendation:
-{recommendation}
-""")
-    
-    recommendation = makeRecommendation(model, np.array(vector), botrytis_rate, no_sugar_rate, typical_sugar_rate)
-    st.write("""
-# Forecast Storm
-Below are my recommendation:
-{recommendation}
-""")
+    st.write(f"The decision is: {recommendation}")
